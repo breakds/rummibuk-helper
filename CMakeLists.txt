@@ -47,6 +47,8 @@ set(${PROJECT_NAME}_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NA
 ####################
 
 find_package(spdlog REQUIRED)
+add_compile_definitions(SPDLOG_FMT_EXTERNAL)
+find_package(fmt REQUIRED)
 find_package(absl REQUIRED)
 
 if(ENABLE_TESTING)
@@ -62,7 +64,7 @@ endif()
 # Use the project root to find includes
 include_directories(${PROJECT_SOURCE_DIR})
 
-add_subdirectory(src)
+add_subdirectory(rummibuk)
 
 ###############
 ## Packaging ##
@@ -84,7 +86,7 @@ if(ENABLE_INSTALL)
         NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
     install(
-        TARGETS what_time simple
+        TARGETS crok
         EXPORT ${PROJECT_NAME}_Targets
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
