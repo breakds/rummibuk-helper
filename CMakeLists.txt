@@ -31,6 +31,8 @@ include(CMakePackageConfigHelpers)      # Helper to create relocatable packages
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake") # Make our cmake scripts available
 
+include(Helpers)
+
 ###############
 ##  Options  ##
 ###############
