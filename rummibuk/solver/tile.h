@@ -1,10 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace rummibuk {
 
-enum class Color {
+enum class Color : int {
   WILDCARD = 0,
   BLUE     = 1,
   RED      = 2,
@@ -21,6 +22,20 @@ struct Tile {
   bool IsWildcard() const {
     return color == Color::WILDCARD;
   }
+};
+
+class Pile {
+ public:
+  Pile() = default;
+
+  static size_t IdOf(const Tile &tile);
+
+  static const Tile &TileOf(size_t id);
+
+  void Add(const Tile &tile);
+
+ private:
+  std::vector<int> quantities_{};
 };
 
 }  // namespace rummibuk

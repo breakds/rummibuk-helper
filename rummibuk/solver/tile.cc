@@ -55,4 +55,31 @@ Tile Tile::FromString(const std::string &input) {
   return result;
 }
 
+size_t Pile::IdOf(const Tile &tile) {
+  if (tile.color == Color::WILDCARD) {
+    return 0;
+  }
+  return (static_cast<int>(tile.color) - 1) * 13 + tile.number;
+}
+
+const Tile &Pile::TileOf(size_t id) {
+  static const std::vector<Tile> ALL_TILES = []() {
+    std::vector<Tile> result;
+    result.reserve(53);
+    result.emplace_back(Tile{});
+    for (int j = 1; j <= 4; ++j) {
+      Color color = static_cast<Color>(j);
+      for (int i = 1; i <= 13; ++i) {
+        Tile tile = {
+            .color  = color,
+            .number = i,
+        };
+        result.emplace_back(tile);
+      }
+    }
+    return result;
+  }();
+  return ALL_TILES[id];
+}
+
 }  // namespace rummibuk

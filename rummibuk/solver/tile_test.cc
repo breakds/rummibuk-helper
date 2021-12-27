@@ -36,4 +36,10 @@ TEST(TileTest, FromString) {
   }
 }
 
+TEST(PileTest, IdOfAndTileOf) {
+  for (size_t id = 0; id < 53; ++id) {
+    EXPECT_EQ(id, Pile::IdOf(Pile::TileOf(id)));
+  }
+}
+
 }  // namespace rummibuk::testing
