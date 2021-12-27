@@ -69,6 +69,10 @@ class ValidSet {
 
   std::string ToString() const;
 
+  bool operator==(const ValidSet &other) const {
+    return wildcards_ == other.wildcards_ && tile_ids_ == other.tile_ids_;
+  }
+
  private:
   ValidSet(Type type, const std::vector<size_t> &tile_ids, int wildcards)
       : type_(type), tile_ids_(std::move(tile_ids)), wildcards_(wildcards) {

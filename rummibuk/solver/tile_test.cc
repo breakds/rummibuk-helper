@@ -145,4 +145,13 @@ TEST(ValidSetTest, Runs) {
   }
 }
 
+TEST(ValidSetTest, Equality) {
+  {
+    EXPECT_EQ(MakeGroup({{Color::ORANGE, 8}, {Color::BLUE, 8}}, 1),
+              MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 1));
+  }
+
+  { EXPECT_EQ(MakeGroup({{Color::ORANGE, 8}}, 2), MakeRun({{Color::ORANGE, 8}}, 2)); }
+}
+
 }  // namespace rummibuk::testing
