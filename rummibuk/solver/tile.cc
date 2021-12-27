@@ -55,6 +55,32 @@ Tile Tile::FromString(const std::string &input) {
   return result;
 }
 
+std::string Tile::ToString() const {
+  std::string result;
+
+  switch (color) {
+    case Color::WILDCARD:
+      return "[]";
+    case Color::BLUE:
+      result += "B";
+      break;
+    case Color::RED:
+      result += "R";
+      break;
+    case Color::ORANGE:
+      result += "O";
+      break;
+    case Color::BLACK:
+      result += "K";
+      break;
+    default:
+      break;
+  }
+
+  result += std::to_string(number);
+  return result;
+}
+
 Pile::Pile() {
   for (size_t i = 0; i < 53; ++i) {
     quantities_.emplace_back(0);
@@ -90,6 +116,36 @@ const Tile &Pile::TileOf(size_t id) {
 
 void Pile::Add(const Tile &tile) {
   ++quantities_[IdOf(tile)];
+}
+
+ValidSet ValidSet::MakeGroup(const std::vector<size_t> &tile_ids, int wildcards) {
+  return ValidSet(ValidSet::Type::GROUP, tile_ids, wildcards);
+}
+
+ValidSet ValidSet::MakeRun(const std::vector<size_t> &tile_ids, int wildcards) {
+  return ValidSet(ValidSet::Type::RUN, tile_ids, wildcards);
+}
+
+std::string ValidSet::ToString() const {
+  std::string result;
+  if (type_ == ValidSet::Type::GROUP) {
+    result += "GRP(";
+  } else if (type_ == ValidSet::Type::RUN) {
+    result += "RUN(";
+  }
+
+  result += Pile::TileOf(tile_ids_.front()).ToString();
+  for (size_t i = 1; i < tile_ids_.size(); ++i) {
+    result += " ";
+    result += Pile::TileOf(tile_ids_[i]).ToString();
+  }
+  for (int i = 0; i < wildcards_; ++i) {
+    result += " ";
+    result += "[]";
+  }
+  result += ")";
+
+  return result;
 }
 
 }  // namespace rummibuk

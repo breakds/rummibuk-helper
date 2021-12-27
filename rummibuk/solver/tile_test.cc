@@ -72,4 +72,77 @@ TEST(PileTest, Add) {
   }
 }
 
+ValidSet MakeGroup(const std::vector<std::pair<Color, int>> &tiles, int wildcards) {
+  std::vector<size_t> tile_ids{};
+  for (const auto &[color, number] : tiles) {
+    tile_ids.emplace_back(Pile::IdOf(Tile{
+        .color  = color,
+        .number = number,
+    }));
+  }
+  return ValidSet::MakeGroup(tile_ids, wildcards);
+}
+
+TEST(ValidSetTest, Groups) {
+  {
+    EXPECT_EQ(
+        "GRP(B8 R8 O8 K8)",
+        MakeGroup(
+            {{Color::BLACK, 8}, {Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0)
+            .ToString());
+  }
+
+  {
+    EXPECT_EQ(
+        "GRP(B8 R8 O8 [])",
+        MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 1).ToString());
+  }
+
+  {
+    EXPECT_EQ(
+        "GRP(B8 R8 O8)",
+        MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0).ToString());
+  }
+
+  {
+    EXPECT_EQ("GRP(B8 O8 [])",
+              MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 1).ToString());
+  }
+
+  {
+    EXPECT_EQ("GRP(B8 O8 [] [])",
+              MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 2).ToString());
+  }
+
+  { EXPECT_EQ("GRP(O8 [] [])", MakeGroup({{Color::ORANGE, 8}}, 2).ToString()); }
+}
+
+ValidSet MakeRun(const std::vector<std::pair<Color, int>> &tiles, int wildcards) {
+  std::vector<size_t> tile_ids{};
+  for (const auto &[color, number] : tiles) {
+    tile_ids.emplace_back(Pile::IdOf(Tile{
+        .color  = color,
+        .number = number,
+    }));
+  }
+  return ValidSet::MakeRun(tile_ids, wildcards);
+}
+
+TEST(ValidSetTest, Runs) {
+  {
+    EXPECT_EQ(
+        "RUN(K7 K8 K9 K10)",
+        MakeRun(
+            {{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 9}, {Color::BLACK, 10}},
+            0)
+            .ToString());
+  }
+
+  {
+    EXPECT_EQ("RUN(K7 K8 K10 [])",
+              MakeRun({{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 10}}, 1)
+                  .ToString());
+  }
+}
+
 }  // namespace rummibuk::testing
