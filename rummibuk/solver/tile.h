@@ -66,6 +66,7 @@ class ValidSet {
 
   static ValidSet MakeGroup(const std::vector<size_t> &tile_ids, int wildcards);
   static ValidSet MakeRun(const std::vector<size_t> &tile_ids, int wildcards);
+  static ValidSet FromString(const std::string &input);
 
   std::string ToString() const;
 

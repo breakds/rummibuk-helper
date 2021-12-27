@@ -5,7 +5,7 @@ target_sources(tile
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/tile.h>
     PRIVATE tile.cc)
 target_link_libraries(tile
-    PRIVATE spdlog::spdlog)
+    PRIVATE spdlog::spdlog absl::strings)
 
 cc_test(
     NAME tile_test

@@ -3,6 +3,7 @@
 #include <charconv>
 #include <cstdlib>
 
+#include "absl/strings/str_split.h"
 #include "spdlog/spdlog.h"
 
 namespace rummibuk {
@@ -23,7 +24,7 @@ Tile Tile::FromString(const std::string &input) {
   }
 
   switch (input[0]) {
-    case 'W':
+    case '[':
       result.color = Color::WILDCARD;
       return result;
     case 'B':
@@ -124,6 +125,27 @@ ValidSet ValidSet::MakeGroup(const std::vector<size_t> &tile_ids, int wildcards)
 
 ValidSet ValidSet::MakeRun(const std::vector<size_t> &tile_ids, int wildcards) {
   return ValidSet(ValidSet::Type::RUN, tile_ids, wildcards);
+}
+
+ValidSet ValidSet::FromString(const std::string &input) {
+  std::string body = input.substr(4, input.size() - 5);
+  std::vector<std::string> parts = absl::StrSplit(body, ' ');
+  std::vector<size_t> tile_ids{};
+  int wildcards = 0;
+  for (const std::string &part : parts) {
+    Tile tile = Tile::FromString(part);
+    if (tile.IsWildcard()) {
+      ++wildcards;
+    } else {
+      tile_ids.emplace_back(Pile::IdOf(tile));
+    }
+  }
+
+  if (input[0] == 'G') {
+    return ValidSet::MakeGroup(tile_ids, wildcards);
+  } else {
+    return ValidSet::MakeRun(tile_ids, wildcards);
+  }
 }
 
 std::string ValidSet::ToString() const {

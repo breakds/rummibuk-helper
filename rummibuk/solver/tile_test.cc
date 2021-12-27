@@ -25,13 +25,18 @@ TEST(TileTest, FromString) {
   }
 
   {
+    Tile tile = Tile::FromString("K10");
+    EXPECT_THAT(tile, AllOf(Field(&Tile::color, Color::BLACK), Field(&Tile::number, 10)));
+  }
+
+  {
     Tile tile = Tile::FromString("O12");
     EXPECT_THAT(tile,
                 AllOf(Field(&Tile::color, Color::ORANGE), Field(&Tile::number, 12)));
   }
 
   {
-    Tile tile = Tile::FromString("W");
+    Tile tile = Tile::FromString("[]");
     EXPECT_TRUE(tile.IsWildcard());
   }
 }
@@ -84,37 +89,27 @@ ValidSet MakeGroup(const std::vector<std::pair<Color, int>> &tiles, int wildcard
 }
 
 TEST(ValidSetTest, Groups) {
-  {
-    EXPECT_EQ(
-        "GRP(B8 R8 O8 K8)",
-        MakeGroup(
-            {{Color::BLACK, 8}, {Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0)
-            .ToString());
-  }
+  EXPECT_EQ(
+      "GRP(B8 R8 O8 K8)",
+      MakeGroup(
+          {{Color::BLACK, 8}, {Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0)
+          .ToString());
 
-  {
-    EXPECT_EQ(
-        "GRP(B8 R8 O8 [])",
-        MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 1).ToString());
-  }
+  EXPECT_EQ(
+      "GRP(B8 R8 O8 [])",
+      MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 1).ToString());
 
-  {
-    EXPECT_EQ(
-        "GRP(B8 R8 O8)",
-        MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0).ToString());
-  }
+  EXPECT_EQ(
+      "GRP(B8 R8 O8)",
+      MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0).ToString());
 
-  {
-    EXPECT_EQ("GRP(B8 O8 [])",
-              MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 1).ToString());
-  }
+  EXPECT_EQ("GRP(B8 O8 [])",
+            MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 1).ToString());
 
-  {
-    EXPECT_EQ("GRP(B8 O8 [] [])",
-              MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 2).ToString());
-  }
+  EXPECT_EQ("GRP(B8 O8 [] [])",
+            MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 2).ToString());
 
-  { EXPECT_EQ("GRP(O8 [] [])", MakeGroup({{Color::ORANGE, 8}}, 2).ToString()); }
+  EXPECT_EQ("GRP(O8 [] [])", MakeGroup({{Color::ORANGE, 8}}, 2).ToString());
 }
 
 ValidSet MakeRun(const std::vector<std::pair<Color, int>> &tiles, int wildcards) {
@@ -129,29 +124,46 @@ ValidSet MakeRun(const std::vector<std::pair<Color, int>> &tiles, int wildcards)
 }
 
 TEST(ValidSetTest, Runs) {
-  {
-    EXPECT_EQ(
-        "RUN(K7 K8 K9 K10)",
-        MakeRun(
-            {{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 9}, {Color::BLACK, 10}},
-            0)
-            .ToString());
-  }
+  EXPECT_EQ(
+      "RUN(K7 K8 K9 K10)",
+      MakeRun(
+          {{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 9}, {Color::BLACK, 10}},
+          0)
+          .ToString());
 
-  {
-    EXPECT_EQ("RUN(K7 K8 K10 [])",
-              MakeRun({{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 10}}, 1)
-                  .ToString());
-  }
+  EXPECT_EQ(
+      "RUN(K7 K8 K10 [])",
+      MakeRun({{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 10}}, 1).ToString());
 }
 
 TEST(ValidSetTest, Equality) {
-  {
-    EXPECT_EQ(MakeGroup({{Color::ORANGE, 8}, {Color::BLUE, 8}}, 1),
-              MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 1));
-  }
+  EXPECT_EQ(
+      ValidSet::FromString("GRP(B8 R8 O8 K8)"),
+      MakeGroup(
+          {{Color::BLACK, 8}, {Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0));
 
-  { EXPECT_EQ(MakeGroup({{Color::ORANGE, 8}}, 2), MakeRun({{Color::ORANGE, 8}}, 2)); }
+  EXPECT_EQ(ValidSet::FromString("GRP(B8 R8 O8 [])"),
+            MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 1));
+
+  EXPECT_EQ(ValidSet::FromString("GRP(B8 R8 O8)"),
+            MakeGroup({{Color::RED, 8}, {Color::BLUE, 8}, {Color::ORANGE, 8}}, 0));
+
+  EXPECT_EQ(ValidSet::FromString("GRP(B8 O8 [])"),
+            MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 1));
+
+  EXPECT_EQ(ValidSet::FromString("GRP(B8 O8 [] [])"),
+            MakeGroup({{Color::BLUE, 8}, {Color::ORANGE, 8}}, 2));
+
+  EXPECT_EQ(ValidSet::FromString("GRP(O8 [] [])"), MakeGroup({{Color::ORANGE, 8}}, 2));
+
+  EXPECT_EQ(
+      ValidSet::FromString("RUN(K7 K8 K9 K10)"),
+      MakeRun(
+          {{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 9}, {Color::BLACK, 10}},
+          0));
+
+  EXPECT_EQ(ValidSet::FromString("RUN(K7 K8 K10 [])"),
+            MakeRun({{Color::BLACK, 7}, {Color::BLACK, 8}, {Color::BLACK, 10}}, 1));
 }
 
 }  // namespace rummibuk::testing
