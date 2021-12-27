@@ -55,6 +55,12 @@ Tile Tile::FromString(const std::string &input) {
   return result;
 }
 
+Pile::Pile() {
+  for (size_t i = 0; i < 53; ++i) {
+    quantities_.emplace_back(0);
+  }
+}
+
 size_t Pile::IdOf(const Tile &tile) {
   if (tile.color == Color::WILDCARD) {
     return 0;
@@ -80,6 +86,10 @@ const Tile &Pile::TileOf(size_t id) {
     return result;
   }();
   return ALL_TILES[id];
+}
+
+void Pile::Add(const Tile &tile) {
+  ++quantities_[IdOf(tile)];
 }
 
 }  // namespace rummibuk

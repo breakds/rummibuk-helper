@@ -42,4 +42,34 @@ TEST(PileTest, IdOfAndTileOf) {
   }
 }
 
+TEST(PileTest, Add) {
+  Pile pile;
+
+  EXPECT_EQ(0, pile.wildcards());
+
+  Tile tile;
+  pile.Add(tile);
+
+  tile.color  = Color::BLACK;
+  tile.number = 10;
+  pile.Add(tile);
+  pile.Add(tile);
+
+  tile.color  = Color::ORANGE;
+  tile.number = 7;
+  pile.Add(tile);
+
+  EXPECT_EQ(1, pile.wildcards());
+
+  for (size_t id = 1; id <= 52; ++id) {
+    if (id == 49) {
+      EXPECT_EQ(2, pile.count(id));
+    } else if (id == 33) {
+      EXPECT_EQ(1, pile.count(id));
+    } else {
+      EXPECT_EQ(0, pile.count(id));
+    }
+  }
+}
+
 }  // namespace rummibuk::testing

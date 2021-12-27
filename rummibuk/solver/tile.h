@@ -26,13 +26,21 @@ struct Tile {
 
 class Pile {
  public:
-  Pile() = default;
+  Pile();
 
   static size_t IdOf(const Tile &tile);
 
   static const Tile &TileOf(size_t id);
 
   void Add(const Tile &tile);
+
+  int wildcards() const {
+    return quantities_[0];
+  }
+
+  int count(size_t id) const {
+    return quantities_[id];
+  }
 
  private:
   std::vector<int> quantities_{};
