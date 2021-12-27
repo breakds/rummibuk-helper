@@ -119,6 +119,10 @@ void Pile::Add(const Tile &tile) {
   ++quantities_[IdOf(tile)];
 }
 
+void Pile::Add(const std::string &input) {
+  ++quantities_[IdOf(Tile::FromString(input))];
+}
+
 ValidSet ValidSet::MakeGroup(const std::vector<size_t> &tile_ids, int wildcards) {
   return ValidSet(ValidSet::Type::GROUP, tile_ids, wildcards);
 }
@@ -128,7 +132,7 @@ ValidSet ValidSet::MakeRun(const std::vector<size_t> &tile_ids, int wildcards) {
 }
 
 ValidSet ValidSet::FromString(const std::string &input) {
-  std::string body = input.substr(4, input.size() - 5);
+  std::string body               = input.substr(4, input.size() - 5);
   std::vector<std::string> parts = absl::StrSplit(body, ' ');
   std::vector<size_t> tile_ids{};
   int wildcards = 0;

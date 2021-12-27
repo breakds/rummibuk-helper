@@ -35,6 +35,7 @@ class Pile {
   static const Tile &TileOf(size_t id);
 
   void Add(const Tile &tile);
+  void Add(const std::string &input);
 
   int wildcards() const {
     return quantities_[0];
