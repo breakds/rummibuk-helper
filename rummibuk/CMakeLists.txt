@@ -1,4 +1,4 @@
-add_executable(crok)
-target_sources(crok PRIVATE crok.cc)
-target_link_libraries(crok PRIVATE spdlog::spdlog fmt::fmt)
-install(TARGETS crok DESTINATION bin)
+add_executable(brok)
+target_sources(brok PRIVATE brok.cc)
+target_link_libraries(brok PRIVATE spdlog::spdlog fmt::fmt)
+install(TARGETS brok DESTINATION bin)
