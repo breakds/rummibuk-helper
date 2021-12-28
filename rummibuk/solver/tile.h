@@ -109,6 +109,8 @@ class ValidSet {
     return wildcards_ + tile_ids_.size();
   }
 
+  bool FindAndReplaceWithWildcard(size_t tile_id);
+
  private:
   ValidSet(Type type, const std::vector<size_t> &tile_ids, int wildcards)
       : type_(type), tile_ids_(std::move(tile_ids)), wildcards_(wildcards) {

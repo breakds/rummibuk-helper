@@ -1,8 +1,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "rummibuk/solver/tile.h"
 #include "rummibuk/solver/search.h"
+#include "rummibuk/solver/tile.h"
 #include "spdlog/spdlog.h"
 
 int main(int argc, char **argv) {
@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
 
   spdlog::info("Successfully read tiles from {}", argv[1]);
   spdlog::info("Solving ...");
-  auto solution = rummibuk::Solve(pile);
+  auto solution = rummibuk::Solve2(pile);
 
   if (solution.empty()) {
     spdlog::warn("[FAIL] No Solution.");

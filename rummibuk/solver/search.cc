@@ -314,4 +314,69 @@ std::vector<ValidSet> Solve(const Pile& pile) {
   return solution;
 }
 
+std::vector<ValidSet> Solve2(const Pile& pile) {
+  Pile operating_pile = pile;
+
+  int wildcards = operating_pile.wildcards();
+  operating_pile.RemoveWildcard(wildcards);
+
+  std::vector<size_t> wildcard_as_tiles(wildcards, 1);
+
+  std::unordered_set<Pile, PileHash> doomed{};
+
+  while (true) {
+    std::string text{};
+
+    for (size_t tile_id : wildcard_as_tiles) {
+      operating_pile.Add(tile_id);
+      text += " " + Pile::TileOf(tile_id).ToString();
+    }
+
+    spdlog::info("Now searching with wildcards as {}", text);
+
+    SearchState state(operating_pile);
+    std::vector<size_t> completed{};
+    completed = SolveImpl(state, completed, &doomed);
+
+    if (!completed.empty()) {
+      std::vector<ValidSet> solution{};
+      for (size_t j : completed) {
+        solution.emplace_back(state.valid_sets[j]);
+      }
+
+      for (size_t tile_id : wildcard_as_tiles) {
+        for (size_t i = 0; i < solution.size(); ++i) {
+          if (solution[i].FindAndReplaceWithWildcard(tile_id)) {
+            break;
+          }
+        }
+      }
+
+      return solution;
+    }
+
+    for (size_t tile_id : wildcard_as_tiles) {
+      operating_pile.Remove(tile_id);
+    }
+
+    if (std::all_of(wildcard_as_tiles.begin(), wildcard_as_tiles.end(), [](size_t x) {
+          return x == 52;
+        })) {
+      break;
+    }
+
+    // Next combinatin of "wildcard as tiles".
+    for (size_t k = 0; k < wildcards; ++k) {
+      wildcard_as_tiles[k] += 1;
+      if (wildcard_as_tiles[k] <= 52) {
+        break;
+      } else {
+        wildcard_as_tiles[k] = 1;
+      }
+    }
+  }
+
+  return {};
+}
+
 }  // namespace rummibuk

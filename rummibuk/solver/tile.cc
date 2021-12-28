@@ -218,4 +218,17 @@ std::string ValidSet::ToString() const {
   return result;
 }
 
+bool ValidSet::FindAndReplaceWithWildcard(size_t tile_id) {
+  auto iter = std::find(tile_ids_.begin(), tile_ids_.end(), tile_id);
+
+  if (iter == tile_ids_.end()) {
+    return false;
+  }
+
+  tile_ids_.erase(iter);
+  ++wildcards_;
+
+  return true;
+}
+
 }  // namespace rummibuk
