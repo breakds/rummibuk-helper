@@ -41,6 +41,7 @@
                    llvmPackages_11.clang
                    cmake
                    cmakeCurses
+                   gdb
 
                    # Development time dependencies
                    gtest

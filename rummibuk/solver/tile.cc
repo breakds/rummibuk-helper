@@ -152,14 +152,14 @@ size_t Pile::Hash() const {
   static constexpr size_t PRIME = 351843722677;
 
   size_t hash = 0;
-  for (size_t i = 0; i <= 53; ++i) {
+  for (size_t i = 0; i < 53; ++i) {
     hash = (hash * 3 + i) % PRIME;
   }
   return hash;
 }
 
 bool Pile::operator==(const Pile &other) const {
-  for (size_t i = 0; i <= 53; ++i) {
+  for (size_t i = 0; i < 53; ++i) {
     if (quantities_[i] != other.quantities_[i]) {
       return false;
     }

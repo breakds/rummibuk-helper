@@ -221,11 +221,18 @@ struct SearchState {
   }
 };
 
+static constexpr size_t DOOMED_CACHE_SIZE = 1000000;
+
 std::vector<size_t> SolveImpl(const SearchState& input_state,
-                              const std::vector<size_t>& completed) {
+                              const std::vector<size_t>& completed,
+                              std::unordered_set<Pile, PileHash>* doomed) {
+  if (doomed->count(input_state.pile) > 0) {
+    return {};
+  }
+
   // Check for explicit failure.
   int remaining = input_state.pile.wildcards();
-  for (size_t id = 1; id <= 53; ++id) {
+  for (size_t id = 1; id <= 52; ++id) {
     if (input_state.pile.count(id) > 0) {
       if (input_state.tile_edges[id].empty()) {
         return {};
@@ -245,7 +252,7 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
   bool altered = true;
   while (altered) {
     altered = false;
-    for (size_t id = 1; id <= 53; ++id) {
+    for (size_t id = 1; id <= 52; ++id) {
       if (state.pile.count(id) > 0 && state.tile_edges[id].size() == 1) {
         size_t j = *state.tile_edges[id].begin();
         if (!state.Forge(j)) {
@@ -263,6 +270,10 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
     return accu;
   }
 
+  if (doomed->count(state.pile) > 0) {
+    return {};
+  }
+
   std::unordered_set<size_t> removed;
   for (size_t j = 0; j < state.valid_sets.size(); ++j) {
     if (state.remove_marks[j]) {
@@ -272,13 +283,17 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
     bool can_forge = state.Forge(j, &removed);
     if (can_forge) {
       accu.emplace_back(j);
-      std::vector<size_t> result = SolveImpl(state, accu);
+      std::vector<size_t> result = SolveImpl(state, accu, doomed);
       if (!result.empty()) {
         return result;
       }
       accu.pop_back();
     }
     state.Restore(j, removed);
+  }
+
+  if (doomed->size() < DOOMED_CACHE_SIZE) {
+    doomed->insert(state.pile);
   }
 
   return {};
@@ -289,7 +304,8 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
 std::vector<ValidSet> Solve(const Pile& pile) {
   SearchState state(pile);
   std::vector<size_t> completed{};
-  completed = SolveImpl(state, completed);
+  std::unordered_set<Pile, PileHash> doomed{};
+  completed = SolveImpl(state, completed, &doomed);
   std::vector<ValidSet> solution{};
 
   for (size_t j : completed) {
