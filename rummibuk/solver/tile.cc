@@ -119,8 +119,33 @@ void Pile::Add(const Tile &tile) {
   ++quantities_[IdOf(tile)];
 }
 
+void Pile::Add(size_t id) {
+  ++quantities_[id];
+}
+
 void Pile::Add(const std::string &input) {
   ++quantities_[IdOf(Tile::FromString(input))];
+}
+
+void Pile::AddWildcard(int num) {
+  quantities_[0] += num;
+}
+
+void Pile::RemoveWildcard(int num) {
+  if (quantities_[0] < num) {
+    spdlog::critical("Removing {} wildcards but pile has only {}", num, quantities_[0]);
+    std::abort();
+  }
+  quantities_[0] -= num;
+}
+
+void Pile::Remove(size_t id) {
+  if (quantities_[id] <= 0) {
+    spdlog::critical("Removing {}  but pile does not have any",
+                     Pile::TileOf(id).ToString());
+    std::abort();
+  }
+  --quantities_[id];
 }
 
 ValidSet ValidSet::MakeGroup(const std::vector<size_t> &tile_ids, int wildcards) {

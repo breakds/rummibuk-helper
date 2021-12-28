@@ -30,12 +30,23 @@ class Pile {
  public:
   Pile();
 
+  Pile(const Pile &) = default;
+  Pile &operator=(const Pile &) = default;
+  Pile(Pile &&) noexcept        = default;
+  Pile &operator=(Pile &&) noexcept = default;
+
   static size_t IdOf(const Tile &tile);
 
   static const Tile &TileOf(size_t id);
 
   void Add(const Tile &tile);
+  void Add(size_t id);
   void Add(const std::string &input);
+
+  void AddWildcard(int num = 1);
+
+  void RemoveWildcard(int num = 1);
+  void Remove(size_t id);
 
   int wildcards() const {
     return quantities_[0];
@@ -73,6 +84,14 @@ class ValidSet {
 
   bool operator==(const ValidSet &other) const {
     return wildcards_ == other.wildcards_ && tile_ids_ == other.tile_ids_;
+  }
+
+  int wildcards() const {
+    return wildcards_;
+  }
+
+  const std::vector<size_t> &ids() const {
+    return tile_ids_;
   }
 
  private:

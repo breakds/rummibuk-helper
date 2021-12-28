@@ -295,4 +295,20 @@ TEST(InitializeValidSetsTest, Case2) {
       sets));
 }
 
+TEST(SolveTest, Case1) {
+  Pile pile;
+  pile.Add("B3");
+  pile.Add("B4");
+  pile.Add("B5");
+  pile.Add("B6");
+  pile.Add("O4");
+  pile.Add("R4");
+  pile.Add("[]");
+  auto solution = Solve(pile);
+  spdlog::info("Solution is shown below:");
+  for (const auto &valid_set : solution) {
+    spdlog::info("{}", valid_set.ToString());
+  }
+}
+
 }  // namespace rummibuk::testing
