@@ -223,22 +223,6 @@ struct SearchState {
 
 std::vector<size_t> SolveImpl(const SearchState& input_state,
                               const std::vector<size_t>& completed) {
-  // DEBUG
-  spdlog::info("Entering");
-  if (input_state.pile.wildcards() > 0) {
-    spdlog::info("  -- [] x {}", input_state.pile.wildcards());
-  }
-  for (size_t id = 1; id <= 53; ++id) {
-    if (input_state.pile.count(id) > 0) {
-      spdlog::info(
-          "  -- {} x {}", Pile::TileOf(id).ToString(), input_state.pile.count(id));
-    }
-  }
-  spdlog::info("  -> completed:");
-  for (size_t k : completed) {
-    spdlog::info("     {}", input_state.valid_sets[k].ToString());
-  }
-
   // Check for explicit failure.
   int remaining = input_state.pile.wildcards();
   for (size_t id = 1; id <= 53; ++id) {
@@ -255,9 +239,6 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
     return completed;
   }
 
-  // DEBUG
-  spdlog::info("  -- Remaining: {}", remaining);
-
   SearchState state        = input_state;
   std::vector<size_t> accu = completed;
 
@@ -268,6 +249,8 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
       if (state.pile.count(id) > 0 && state.tile_edges[id].size() == 1) {
         size_t j = *state.tile_edges[id].begin();
         if (!state.Forge(j)) {
+          // DEBUG
+          spdlog::info("Contradiction!");
           return {};
         }
         accu.emplace_back(j);
@@ -282,20 +265,12 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
     return accu;
   }
 
-  // DEBUG
-  spdlog::info("  -> accu:");
-  for (size_t k : accu) {
-    spdlog::info("     {}", input_state.valid_sets[k].ToString());
-  }
-
   std::unordered_set<size_t> removed;
   for (size_t j = 0; j < state.valid_sets.size(); ++j) {
     if (state.remove_marks[j]) {
       continue;
     }
 
-    // DEBUG
-    spdlog::info("  -> Attempting {}", state.valid_sets[j].ToString());
     bool can_forge = state.Forge(j, &removed);
     if (can_forge) {
       accu.emplace_back(j);
