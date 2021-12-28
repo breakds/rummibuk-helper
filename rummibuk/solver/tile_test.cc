@@ -1,5 +1,7 @@
 #include "rummibuk/solver/tile.h"
 
+#include <unordered_set>
+
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
@@ -75,6 +77,45 @@ TEST(PileTest, Add) {
       EXPECT_EQ(0, pile.count(id));
     }
   }
+}
+
+TEST(PileTest, Hash) {
+  Pile pile1;
+  pile1.Add("B3");
+  pile1.Add("B4");
+  pile1.Add("B5");
+  pile1.Add("B6");
+  pile1.Add("O4");
+  pile1.Add("R4");
+
+  Pile pile2;
+  pile2.Add("K3");
+  pile2.Add("K4");
+  pile2.Add("K5");
+  pile2.Add("K6");
+  pile2.Add("K7");
+  pile2.Add("R6");
+  pile2.Add("R7");
+  pile2.Add("R8");
+  pile2.Add("R8");
+  pile2.Add("B8");
+  pile2.Add("K8");
+
+  Pile pile3;
+  pile3.Add("K3");
+  pile3.Add("K4");
+  pile3.Add("K6");
+  pile3.Add("K7");
+  pile3.Add("K8");
+  pile3.Add("[]");
+
+  std::unordered_set<Pile, PileHash> set{};
+  set.insert(pile1);
+  set.insert(pile2);
+
+  EXPECT_EQ(1, set.count(pile1));
+  EXPECT_EQ(1, set.count(pile2));
+  EXPECT_EQ(0, set.count(pile3));
 }
 
 ValidSet MakeGroup(const std::vector<std::pair<Color, int>> &tiles, int wildcards) {

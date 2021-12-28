@@ -60,8 +60,19 @@ class Pile {
     return quantities_[IdOf(tile)];
   }
 
+  size_t Hash() const;
+
+  bool operator==(const Pile &other) const;
+
  private:
   std::vector<int> quantities_{};
+};
+
+class PileHash {
+ public:
+  size_t operator()(const Pile &pile) const {
+    return pile.Hash();
+  };
 };
 
 class ValidSet {
