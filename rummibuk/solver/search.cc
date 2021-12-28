@@ -249,8 +249,6 @@ std::vector<size_t> SolveImpl(const SearchState& input_state,
       if (state.pile.count(id) > 0 && state.tile_edges[id].size() == 1) {
         size_t j = *state.tile_edges[id].begin();
         if (!state.Forge(j)) {
-          // DEBUG
-          spdlog::info("Contradiction!");
           return {};
         }
         accu.emplace_back(j);
