@@ -297,13 +297,94 @@ TEST(InitializeValidSetsTest, Case2) {
 
 TEST(SolveTest, Case1) {
   Pile pile;
+  pile.Add("K3");
+  pile.Add("K4");
+  pile.Add("K6");
+  pile.Add("K7");
+  pile.Add("K8");
+  pile.Add("[]");
+
+  auto solution = Solve(pile);
+  spdlog::info("Solution is shown below:");
+  for (const auto &valid_set : solution) {
+    spdlog::info("{}", valid_set.ToString());
+  }
+}
+
+TEST(SolveTest, Case2) {
+  Pile pile;
+  pile.Add("K3");
+  pile.Add("K4");
+  pile.Add("K5");
+  pile.Add("K6");
+  pile.Add("K7");
+  pile.Add("R6");
+  pile.Add("R7");
+  pile.Add("R8");
+  pile.Add("R8");
+  pile.Add("B8");
+  pile.Add("K8");
+
+  auto solution = Solve(pile);
+  spdlog::info("Solution is shown below:");
+  for (const auto &valid_set : solution) {
+    spdlog::info("{}", valid_set.ToString());
+  }
+}
+
+TEST(SolveTest, Case3) {
+  Pile pile;
+  pile.Add("K3");
+  pile.Add("K4");
+  pile.Add("K5");
+  pile.Add("K6");
+  pile.Add("K7");
+  pile.Add("R6");
+  pile.Add("R7");
+  pile.Add("R8");
+  pile.Add("R8");
+  pile.Add("B8");
+  pile.Add("K8");
+  pile.Add("B3");
+  pile.Add("O3");
+  pile.Add("K3");
+  pile.Add("B9");
+  pile.Add("O9");
+  pile.Add("K9");
+  pile.Add("B12");
+  pile.Add("R12");
+  pile.Add("O12");
+  pile.Add("K2");
+  pile.Add("B2");
+  pile.Add("R2");
+  pile.Add("O2");
+  pile.Add("B9");
+  pile.Add("R9");
+  pile.Add("O9");
+  pile.Add("R2");
+  pile.Add("R3");
+  pile.Add("R4");
+  pile.Add("R9");
+  pile.Add("R10");
+  pile.Add("R11");
+  pile.Add("R12");
+  pile.Add("R13");
+  pile.Add("B8");
+  pile.Add("B9");
+  pile.Add("B10");
+  pile.Add("O9");
+  pile.Add("O10");
+  pile.Add("O11");
+  pile.Add("B2");
   pile.Add("B3");
   pile.Add("B4");
-  pile.Add("B5");
-  pile.Add("B6");
-  pile.Add("O4");
-  pile.Add("R4");
+  pile.Add("B1");
+  pile.Add("O1");
+  pile.Add("K1");
   pile.Add("[]");
+  pile.Add("O11");
+  pile.Add("K11");
+
   auto solution = Solve(pile);
   spdlog::info("Solution is shown below:");
   for (const auto &valid_set : solution) {

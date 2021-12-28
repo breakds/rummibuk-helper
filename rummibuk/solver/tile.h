@@ -94,6 +94,10 @@ class ValidSet {
     return tile_ids_;
   }
 
+  int total_tiles() const {
+    return wildcards_ + tile_ids_.size();
+  }
+
  private:
   ValidSet(Type type, const std::vector<size_t> &tile_ids, int wildcards)
       : type_(type), tile_ids_(std::move(tile_ids)), wildcards_(wildcards) {
