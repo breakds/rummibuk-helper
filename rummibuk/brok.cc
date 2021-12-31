@@ -8,6 +8,11 @@
 int main(int argc, char **argv) {
   rummibuk::Pile pile;
 
+  if (argc < 2) {
+    spdlog::error("Please specify the path to the file that contains the list of tiles.");
+    std::abort();
+  }
+
   {
     std::ifstream input(argv[1]);
 

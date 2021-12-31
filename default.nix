@@ -5,9 +5,9 @@
 , abseil-cpp }:
 
 llvmPackages_11.stdenv.mkDerivation rec {
-  pname = "cpp-examples";
-  version = "0.1.0";
-  
+  pname = "rummibuk-helper";
+  version = "1.0.0";
+
   src = ./.;
 
   nativeBuildInputs = [ cmake ];
@@ -19,12 +19,12 @@ llvmPackages_11.stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/nixvital/nix-based-cpp-starterkit";
+    homepage = "https://github.com/breakds/rummibuk-helper";
     description = ''
-      A template for Nix based C++ project setup.";
+      Solver for the game Rummibuk.
     '';
     licencse = licenses.mit;
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.breakds ];    
+    maintainers = [ maintainers.breakds ];
   };
 }

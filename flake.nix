@@ -62,5 +62,11 @@
                };
 
                defaultPackage = pkgs.callPackage ./default.nix {};
+
+               defaultApp = {
+                 type = "app";
+                 program = let defaultPackage = self.defaultPackage."${system}";
+                           in "${defaultPackage}/bin/brok";
+               };
              });
 }
