@@ -26,6 +26,9 @@ struct Tile {
   std::string ToString() const;
 };
 
+// A pile defines a subset of a full set of rummibuk tiles. A full set
+// of rummibuk tiles has 106 in it, where we have 4 colors, 13
+// numbers, and 2 copies of each, plus 2 wildcards.
 class Pile {
  public:
   Pile();

@@ -326,13 +326,13 @@ TEST(SolveTest, Case2) {
   EXPECT_GT(solution.size(), 0);
 }
 
-TEST(SolveTest, DISABLED_Case3) {
+TEST(SolveTest, Case3) {
   Pile pile;
-  // pile.Add("K3");
-  // pile.Add("K4");
-  // pile.Add("K5");
-  // pile.Add("K6");
-  // pile.Add("K7");
+  pile.Add("K3");
+  pile.Add("K4");
+  pile.Add("K5");
+  pile.Add("K6");
+  pile.Add("K7");
   pile.Add("R6");
   pile.Add("R7");
   pile.Add("R8");
