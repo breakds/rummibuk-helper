@@ -34,6 +34,16 @@ As an example:
 
 Where `B` stands for blue, `R` stands for red, `O` stands for orange and `K` stands for black.
 
+### Approach 2: Run Directly Via Nix
+
+Alternatively, if you have `nix` there is no need to clone this repo at all in case you just want to run it.
+
+This should be as simple as
+
+```
+$ nix run "github:breakds/rummibuk-helper" /the/path/to/to/the/problem.txt
+```
+
 ## Algorithm
 
 The problem is essentially an graph-theoretical optimization problem of "finding exact coverage". Such problems are commonly solved by
