@@ -23,7 +23,7 @@ struct Tile {
     return color == Color::WILDCARD;
   }
 
-  std::string ToString() const;
+  std::string ToString(bool colored = false) const;
 };
 
 // A pile defines a subset of a full set of rummibuk tiles. A full set
@@ -94,7 +94,7 @@ class ValidSet {
   static ValidSet MakeRun(const std::vector<size_t> &tile_ids, int wildcards);
   static ValidSet FromString(const std::string &input);
 
-  std::string ToString() const;
+  std::string ToString(bool colored = false) const;
 
   bool operator==(const ValidSet &other) const {
     return wildcards_ == other.wildcards_ && tile_ids_ == other.tile_ids_;

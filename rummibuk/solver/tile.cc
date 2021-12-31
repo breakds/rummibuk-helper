@@ -1,9 +1,11 @@
 #include "rummibuk/solver/tile.h"
 
+#include <array>
 #include <charconv>
 #include <cstdlib>
 
 #include "absl/strings/str_split.h"
+#include "fmt/core.h"
 #include "spdlog/spdlog.h"
 
 namespace rummibuk {
@@ -12,6 +14,14 @@ namespace {
 void ReportInvalidTileAndDie(const std::string &input) {
   spdlog::critical("'{}' is not a valid tile.", input);
   std::abort();
+}
+
+template <typename Input>
+std::string Colored(const Input &input, Color color) {
+  static std::array<std::string, 5> COLOR_CODES = {
+      "\x1B[32m", "\x1B[36m", "\x1B[31m", "\x1B[33m", "\x1B[37m"};
+
+  return fmt::format("{}{}\x1B[0m", COLOR_CODES[static_cast<int>(color)], input);
 }
 
 }  // namespace
@@ -56,12 +66,16 @@ Tile Tile::FromString(const std::string &input) {
   return result;
 }
 
-std::string Tile::ToString() const {
+std::string Tile::ToString(bool colored) const {
   std::string result;
 
   switch (color) {
     case Color::WILDCARD:
-      return "[]";
+      if (colored) {
+        return Colored("[]", Color::WILDCARD);
+      } else {
+        return "[]";
+      }
     case Color::BLUE:
       result += "B";
       break;
@@ -79,7 +93,12 @@ std::string Tile::ToString() const {
   }
 
   result += std::to_string(number);
-  return result;
+
+  if (colored) {
+    return Colored(result, color);
+  } else {
+    return result;
+  }
 }
 
 Pile::Pile() {
@@ -196,7 +215,7 @@ ValidSet ValidSet::FromString(const std::string &input) {
   }
 }
 
-std::string ValidSet::ToString() const {
+std::string ValidSet::ToString(bool colored) const {
   std::string result;
   if (type_ == ValidSet::Type::GROUP) {
     result += "GRP(";
@@ -204,14 +223,18 @@ std::string ValidSet::ToString() const {
     result += "RUN(";
   }
 
-  result += Pile::TileOf(tile_ids_.front()).ToString();
+  result += Pile::TileOf(tile_ids_.front()).ToString(colored);
   for (size_t i = 1; i < tile_ids_.size(); ++i) {
     result += " ";
-    result += Pile::TileOf(tile_ids_[i]).ToString();
+    result += Pile::TileOf(tile_ids_[i]).ToString(colored);
   }
   for (int i = 0; i < wildcards_; ++i) {
     result += " ";
-    result += "[]";
+    if (colored) {
+      result += Colored("[]", Color::WILDCARD);
+    } else {
+      result += "[]";
+    }
   }
   result += ")";
 

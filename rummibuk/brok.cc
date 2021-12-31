@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
   } else {
     spdlog::info("Found solution.");
     for (const rummibuk::ValidSet &v : solution) {
-      spdlog::info("  {}", v.ToString());
+      spdlog::info("  {}", v.ToString(true));
     }
   }
 
