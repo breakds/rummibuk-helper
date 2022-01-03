@@ -1,12 +1,12 @@
 [![built with nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
 
-# Rummibuk Helper
+# Rummikub Helper
 
 ## Description
 
-This provides a solver for the game Rummibuk called `brok`. It is a homophonic name after "broke", but also stands for the 4 colors in the regular rummibuk game (b = blue, r = red, o = orange, and k = black).
+This provides a solver for the game Rummikub called `brok`. It is a homophonic name after "broke", but also stands for the 4 colors in the regular rummibuk game (b = blue, r = red, o = orange, and k = black).
 
-Given a **subset** a full set of Rummibuk tiles, the solver `brok` will try to find a solution that
+Given a **subset** a full set of Rummikub tiles, the solver `brok` will try to find a solution that
 
 1. forms valid sets (i.e. runs and groups, see [wikipedia](https://en.wikipedia.org/wiki/Rummikub#Sets) for details)
 2. by using all the tiles in the subset
@@ -18,7 +18,7 @@ If solution exists, the solver will print one of the solutions. Otherwise it wil
 ### Approach 1: Build From Source
 
 ```bash
-$ cd rummibuk-helper
+$ cd rummikub-helper
 $ nix develop
 $ mkdir build
 $ cd build
@@ -41,7 +41,7 @@ Alternatively, if you have `nix` there is no need to clone this repo at all in c
 This should be as simple as
 
 ```
-$ nix run "github:breakds/rummibuk-helper" /the/path/to/to/the/problem.txt
+$ nix run "github:breakds/rummikub-helper" /the/path/to/to/the/problem.txt
 ```
 
 ## Algorithm
