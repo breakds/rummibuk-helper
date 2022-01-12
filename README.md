@@ -51,6 +51,6 @@ The problem is essentially an graph-theoretical optimization problem of "finding
 1. Posing it as an integer programming problem and use integer programming solver to solve it. Example: [paper](https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.95.9619&rep=rep1&type=pdf)
 2. Brute-force search with heuristics
 
-To my best knowledge, the most efficient algorithm to this has polynomial complexity, which is based on dynamic programming as proposed in [The Complexity of Rummikub Problems](https://arxiv.org/pdf/1604.07553.pdf).
+To my best knowledge, the most efficient algorithm to this has polynomial complexity, which is based on dynamic programming as proposed in [The Complexity of Rummikub Problems](https://arxiv.org/pdf/1604.07553.pdf) and [this answer](https://cs.stackexchange.com/questions/88180/how-to-determine-the-maximum-valued-play-in-rummikub).
 
 The solver `brok` as presented in this repo follows approach 2, i.e. it is a brute-force tree search with heuristics. I do it this way because it is easy to implement and alreayd extremely efficient.
